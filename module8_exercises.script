@@ -1,0 +1,55 @@
+def module8():
+
+# module 8a
+# speedj()
+# rotate wrist 3 of the UR3e at 180deg/s for 10s
+# -------------------------------
+
+
+qd = [0,0,0,0,0,d2r(180)]
+a = d2r(180)
+t = 10
+speedj(qd, a, t)
+sync()
+stopj(a)
+
+# -------------------------------
+# module 8b
+# speedl()
+# move up and down 150mm using speedl() and stopl()
+# -------------------------------
+
+
+
+# -------------------------------
+# module 8c
+# move 250mm in base X- using speedl()
+# -------------------------------
+
+
+
+# -------------------------------
+# module 8d
+# move in a 100mm square in the X-Y plane using speedl()
+# record the start position and end position
+# then use pose_dist() to see how close you ended up to the start position
+# -------------------------------
+
+
+
+# -------------------------------
+# module 8e
+# move in a straight line between 2 poses using servoj()
+# -------------------------------
+
+
+
+# -------------------------------
+# module 8e
+# move in a sine wave between 2 poses using servoj()
+# -------------------------------
+
+
+
+# -------------------------------
+end

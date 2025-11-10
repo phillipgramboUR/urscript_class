@@ -1,0 +1,61 @@
+def module9():
+# world frame
+
+# module 9a
+# create a frame relative to the base
+# make a popup with information about the frame
+# -------------------------------
+
+
+
+# -------------------------------
+# module 9b
+# create 3 waypoints (frames) relative to the previous frame, then move to them
+# -------------------------------
+
+
+
+# -------------------------------
+# module 9c
+# move the previous frame, then move to the waypoints again
+# -------------------------------
+
+
+
+# -------------------------------
+# module 9d
+# move the world frame away from the robot base
+# display the results in a popup
+# -------------------------------
+
+
+
+# -------------------------------
+# module 9e
+# create two frames relative to the world
+# display the pose of the frames relative to the base in a popup
+# -------------------------------
+
+
+
+# -------------------------------
+# module 9f
+# record the previous frame locations
+# adjust the location of the world relative to the base
+# then display the new and old location of the frames
+# -------------------------------
+
+
+
+# -------------------------------
+# module 9g
+# knowing that the world is the parent of all frames:
+# make a function that finds the children of the world, then all of their children, etc
+# display the results in a popup
+# -------------------------------
+
+
+# -------------------------------
+end
+
+# misc notes to clean up later

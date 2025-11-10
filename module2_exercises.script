@@ -1,0 +1,27 @@
+# module 2a
+# # stream this code to the robot
+# -------------------------------
+def my_function():
+    popup("a line of text to be displayed", blocking=True)
+    sleep(0.5)
+    popup("another line of text to be displayed", blocking=True)
+end
+
+# -------------------------------
+# module 2b
+# modify the code from module 1 to prompt the user to enter the values used as the function arguments
+# use request_float_from_primary_client()
+# then stream the function to the robot
+# -------------------------------
+
+
+
+# -------------------------------
+# module 2c
+# modify the code from module 2b to loop 3 times
+# -------------------------------
+
+
+
+# -------------------------------
+
