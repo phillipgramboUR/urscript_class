@@ -1,0 +1,30 @@
+# module 1a
+# basics of a functions
+# create a function, and use it on the robot
+# function should be named max_of_two, have two arguments, and return the largest value
+# -----------------------------
+def max_of_2(a,b):
+    if (a > b):
+        return a
+    else:
+        return b
+    end
+  
+end
+
+# -----------------------------
+# module 1b
+# create a function that calls another function
+# function should be named max_of_three(), have three arguments, and return the largest value
+# -----------------------------
+def max_of_3(a,b,c):
+    # d=max_of_2(a, b)
+    # e=max_of_2(c,d)
+    # return e
+    return max_of_2((max_of_2(a, b)), c)
+end
+
+# -----------------------------
+
+
+

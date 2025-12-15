@@ -1,0 +1,187 @@
+def module6():
+    # module 6a
+    # freedrive
+    # put the robot into unconstrained freedrive for 5 seconds, then end freedrive mode
+    # -------------------------------
+    def m6a():
+        freedrive_mode()
+        sleep(5)
+        end_freedrive_mode()
+    end
+    m6a()
+    # -------------------------------
+    # module 6b
+    # put the robot into constrained freedrive for 5 seconds, then end freedrive mode
+    # have the constraints be set up so that the robot can only move in the tool x and y axes
+    # -------------------------------
+    def m6b():
+        freedrive_mode([1,1,0,0,0,0],get_actual_tcp_pose())
+        sleep(5)
+        end_freedrive_mode()
+    end
+    # sleep(1)
+    # m6b()
+
+    # -------------------------------
+    # module 6c
+    # use freedrive and a digital input to save 3 waypoints, then move to them
+    # -------------------------------
+    def m6c():
+        freedrive_mode()
+        # first pt
+        while not(get_standard_digital_in(0)==True):
+          sync()
+        end
+        p1=get_actual_tcp_pose()
+        while not(get_standard_digital_in(0)==False):
+          sync()
+        end
+        # second pt
+        while not(get_standard_digital_in(0)==True):
+          sync()
+        end
+        p2=get_actual_tcp_pose()
+        while not(get_standard_digital_in(0)==False):
+          sync()
+        end
+        # third pt
+        while not(get_standard_digital_in(0)==True):
+          sync()
+        end
+        p3=get_actual_tcp_pose()
+        while not(get_standard_digital_in(0)==False):
+          sync()
+        end
+        # pause, then move to the points
+        sleep(3)
+        end_freedrive_mode()
+        optimovej(p1)
+        optimovej(p2)
+        optimovej(p3)
+
+    end
+    m6c()
+
+    # -------------------------------
+    # module 6d
+    # get two waypoints that are just above the table and at least 100mm apart
+    # move to the first waypoint
+    # go into a force node, pushing down into the table with 5N of force
+    # loop back and forth between the waypoints
+    # -------------------------------
+    def m6d():
+        freedrive_mode()
+        # first pt
+        while not(get_standard_digital_in(0)==True):
+          sync()
+        end
+        p1=get_actual_tcp_pose()
+        while not(get_standard_digital_in(0)==False):
+          sync()
+        end
+        # second pt
+        while not(get_standard_digital_in(0)==True):
+          sync()
+        end
+        p2 = get_actual_tcp_pose()
+        while not(get_standard_digital_in(0)==False):
+          sync()
+        end
+        end_freedrive_mode()
+        sleep(1)
+        
+        movej(p1)
+        while not(is_steady()): # wait for is_steady before force mode
+          sync()
+        end
+        force_mode(p[0,0,0,0,0,0],[0,0,1,0,0,0],[0,0,-5,0,0,0],2,[0.1,0.1,0.025,0.1,0.1,0.1])
+        movel(p2, v=0.05)
+        end_force_mode()
+        # controlled stop to break tension
+        stopl(2)
+        movel(pose_add(get_actual_tcp_pose(),p[0,0,0.1,0,0,0]),v=0.25)
+
+    end
+    m6d()
+
+    # -------------------------------
+    # module 6e
+    # take the code from the previous module, and change it so that amount of force is controlled by a thread
+    # make the amount of force a sine wave
+    # -------------------------------
+    def m6e():
+      # save the waypoints as before
+      freedrive_mode()
+      # first pt
+      while not(get_standard_digital_in(0)==True):
+        sync()
+      end
+      p1=get_actual_tcp_pose()
+      while not(get_standard_digital_in(0)==False):
+        sync()
+      end
+      # second pt
+      while not(get_standard_digital_in(0)==True):
+        sync()
+      end
+      p2 = get_actual_tcp_pose()
+      while not(get_standard_digital_in(0)==False):
+        sync()
+      end
+      end_freedrive_mode()
+      sleep(1)
+      
+      movej(p1)
+      while not(is_steady()): # wait for is_steady before force mode
+        sync()
+      end
+      #------thread to modulate force------
+      thread modulate_force_thread():
+        while True:
+        t = time()
+        t_sec = t.sec + t.nanosec / 1000000000
+        f_0to1 = (sin(t) + 1)/2
+        f_0to10 = f_0to1 * 10
+        force_mode(p[0,0,0,0,0,0],[0,0,1,0,0,0],[0,0,(-1*f_0to10),0,0,0],2,[0.1,0.1,0.025,0.1,0.1,0.1])          
+        end
+      end
+      # turn on thread
+      thrd_control = run modulate_force_thread()
+      # move back and forth
+      movel(p2, v=0.05)
+      movel(p1, v=0.05)
+      # kill thread, break contact
+      kill thrd_control
+      freedrive_mode()
+      sleep(0.1)
+      end_freedrive_mode()
+      stopl()
+      movel(pose_add(get_actual_tcp_pose(), p[0,0,0.05,0,0,0]),v=0.05)
+
+    end
+    m6e()
+
+    # -------------------------------
+end
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

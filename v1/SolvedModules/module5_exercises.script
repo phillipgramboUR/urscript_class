@@ -1,0 +1,101 @@
+def module5():
+    # module 5a
+    # threads
+    # write a thread to flash Digital out 0 on and off at 0.5Hz
+    # run this thread for 5 seconds
+    # -------------------------------
+    thread m5a_thread():
+        while True:
+            set_standard_digital_out(0,True)
+            sleep(0.5)
+            set_standard_digital_out(0,False)
+            sleep(0.5)
+        end
+    end
+    def m5a():
+        # run the thread
+        m5a_control_var = run m5a_thread()
+        sleep(5)
+        kill m5a_control_var
+        set_standard_digital_out(0,False)
+    end
+    m5a()
+
+    # -------------------------------
+    # module 5b
+    # write another thread to flash Digital Out 1 on and off at 0.2Hz
+    # run both of these threads for 5 seconds, kill them, wait 3 seconds, then run them again.
+    # -------------------------------
+    thread m5b_thread():
+        while True:
+            set_standard_digital_out(1,True)
+            sleep(0.2)
+            set_standard_digital_out(1,False)
+            sleep(0.2)
+        end
+    end
+    def m5b():
+        # run the threads
+        m5b_control_var = run m5b_thread()
+        m5a_control_var = run m5a_thread()
+        sleep(5)
+        kill m5b_control_var
+        kill m5a_control_var
+        sleep(3)
+        m5b_control_var = run m5b_thread()
+        m5a_control_var = run m5a_thread()
+        sleep(5)
+        kill m5b_control_var
+        kill m5a_control_var
+    end
+    m5b() 
+
+    # -------------------------------
+    # module 5c
+    # modify the thread from module 5a to end after 3 cycles
+    # run the threads from 5a and 5b
+    # have the thread from 5b end exactly 1 second after the thread from 5a
+    # -------------------------------
+    thread m5a_alt():
+        local i=0
+        while i < 3:
+            set_standard_digital_out(0,True)
+            sleep(0.5)
+            set_standard_digital_out(0,False)
+            sleep(0.5)
+            i=i+1
+        end
+    end
+    def m5c():
+        m5a_alt_control_var = run m5a_alt()
+        m5b_control_var = run m5b()
+        join m5a_alt_control_var
+        sleep(1)
+        kill m5b_control_var
+    end
+    m5c()
+
+    # -------------------------------
+    # module 5d
+    # have the robot move between 3 waypoints, while a thread cycles Digital Out 0 on and off at 0.5Hz
+    # -------------------------------
+    def m5d():
+      waypt1 = p[0.2,-0.15,0.25,0,3.14159,0]
+        waypt2 = p[0.4,-0.15,0.45,0,3.14159,0]
+        movej(waypt1)
+        m5a_control_var = run m5a_thread()
+        movel(waypt2, v=0.1)
+        kill m5a_control_var
+        movej(waypt1)
+    end
+    m5d()   
+
+    # -------------------------------
+end
+
+
+
+
+
+
+

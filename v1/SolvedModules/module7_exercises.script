@@ -1,0 +1,284 @@
+def module7():
+  # module 7a
+  # forward kinematics
+  # move to the waypoint that is at the provided set of joint angles
+  # -------------------------------
+
+  # function to convert a list from degrees to radians
+  def list_d2r(arg):
+    local arg_length = length(arg)
+    local tmp_list = make_list(arg_length, 0)
+    local i=0
+    while i < arg_length:
+      tmp_list[i]=d2r(arg[i])
+      i=i+1
+    end
+    return tmp_list
+  end
+  j_degrees = [90, -90, 90, -90, -90, 0]
+
+  def m7a():
+    j_radians = list_d2r(j_degrees)
+    optimovej(j_radians)
+  end
+  m7a()
+
+  # -------------------------------
+  # module 7b
+  # IK (inverse kinematics)
+  # move to the same waypoint using 2 different joint configurations
+  # -------------------------------
+  
+  def m7b():
+    j_lefty = j_radians
+    j_right_deg = [-90, -90, -90, -90, 90, 0]
+    j_righty = list_d2r(j_right_deg)
+    # use freedrive to capture a pose
+    freedrive_mode()
+    # first pt
+    while not(get_standard_digital_in(0)==True):
+      sync()
+    end
+    my_pose = get_actual_tcp_pose()
+    while not(get_standard_digital_in(0)==False):
+      sync()
+    end
+    end_freedrive_mode()
+    sleep(1)
+
+    angles1 = get_inverse_kin(my_pose, j_lefty)
+    angles2 = get_inverse_kin(my_pose, j_righty)
+    movej(angles1)
+    movej(angles2)
+    movej(angles1)
+  end
+  m7b()
+
+  # -------------------------------
+  # module 7c
+  # pose reachability
+  # start from the provided waypoint
+  # find a waypoint that is as far in the base x+ direction as possible and still reachable
+  # move to that waypoint
+  # -------------------------------
+  waypt1 = p[0,-0.15,0.25,0,3.14159,0]
+  
+  def m7c():
+    final_pose = waypt1
+    offfset = p[0.001,0,0,0,0,0]
+    loop_continue=True
+    while loop_continue==True:
+      tmp_pose = pose_add(final_pose,offfset)
+      if (get_inverse_kin_has_solution(tmp_pose)):
+        final_pose = tmp_pose
+      else:
+        loop_continue=False
+      end
+      sync()
+    end
+    final_pose=pose_sub(final_pose,offfset)
+    movej(waypt1)
+    movel(final_pose,v=0.1)
+    sleep(1)
+    movej(waypt1)
+  end
+  m7c()
+  
+  # -------------------------------
+  # module 7d
+  # start from the provided waypoint
+  # find a waypoint that is as far as possible in the base x- direction
+  # find a waypoint that is as far as possible in the base y- direction
+  # move to those waypoints
+  # move to a wyapoint that is 40% of the way from the first to the second waypoint
+  # -------------------------------
+  def m7d():
+    waypt2 = p[-0.1, -0.25, 0.3, 0, 3.14159, 0]
+    x_offset = p[-0.01, 0, 0, 0, 0, 0]
+    y_offset = p[0, -0.01, 0, 0, 0, 0]
+    # loop to calculate in x
+    final_pose_x = waypt2
+    loop_continue=True
+    while loop_continue==True:
+      tmp_pose = pose_add(final_pose_x,x_offset)
+      if (get_inverse_kin_has_solution(tmp_pose)):
+        final_pose_x = tmp_pose
+      else:
+        loop_continue=False
+      end
+      sync()
+    end
+    final_pose_x=pose_sub(final_pose_x, x_offset)
+    #loop to calculate in y
+    final_pose_y = waypt2
+    loop_continue=True
+    while loop_continue==True:
+      tmp_pose = pose_add(final_pose_y,y_offset)
+      if (get_inverse_kin_has_solution(tmp_pose)):
+        final_pose_y = tmp_pose
+      else:
+        loop_continue=False
+      end
+      sync()
+    end
+    final_pose_y=pose_sub(final_pose_y, y_offset)
+
+    # move to limit poses
+    movej(waypt2)
+    movel(final_pose_x, v=0.1)
+    movej(waypt2)
+    movel(final_pose_y, v=0.1)
+    movej(waypt2)
+
+    # go to pt 40% from final_x to final_y
+    target_pose = interpolate_pose(final_pose_x, final_pose_y, 0.4)
+    movel(target_pose)
+    sleep(5)
+    movej(waypt2)
+  end
+
+  # -------------------------------
+  # module 7e
+  # grids
+  # the provided 4 waypoints are the corners of a grid
+  # the grid has 3 rows and 5 columns
+  # move to each point on the grid
+  # -------------------------------
+  def m7e():
+    c1 = p[-0.1,-0.25,0.2,0,3.14159,0]
+    c2 = pose_add(c1, p[0.25,0,0,0,0,0])
+    c3 = pose_add(c2, p[0,-0.1,0,0,0,0])
+    c4 = pose_add(c1, p[0,-0.1,0,0,0,0])
+    movel(c1)
+    movel(c2)
+    movel(c3)
+    movel(c4)
+    movel(c1)
+    # quick example
+    # a=interpolate_pose(c1,c2,(1/4))
+    # b=interpolate_pose(c4,c3,(1/4))
+    # c=interpolate_pose(a,b,(1/2))
+    
+    # formulaic approach
+    # initialize some vars
+    row_alpha=0
+    column_alpha=0
+    row_count=3
+    column_count=5
+    top_row_pose=     p[0, 0, 0, 0, 0, 0]
+    bottom_row_pose=  p[0, 0, 0, 0, 0, 0]
+    final_column_pose=p[0, 0, 0, 0, 0, 0]
+    # loops
+    local i=0
+    while (i < column_count):
+      column_alpha=i*1/(column_count-1)
+      top_row_pose=interpolate_pose(c1,c2,column_alpha)
+      bottom_row_pose=interpolate_pose(c4,c3,column_alpha)
+
+      local j=0
+      # while d < row_count:
+      #   row_alpha=j*1/(row_count-1)
+      #   final_column_pose=interpolate_pose(top_row_pose, bottom_row_pose, row_alpha)
+      #   movel(final_column_pose)
+      
+      #   j=j+1
+      end
+      row_alpha=0
+
+
+      i=i+1
+      sync()
+    end
+
+
+
+  end
+  m7e()
+
+
+
+  # -------------------------------
+  # module 7f
+  # interpolate_pose() calculates a pose at a fraction between 2 poses
+  # write a function that calculates a joint configuration at a fraction between 2 joint configurations
+  # name it interpolate_joints()
+  # -------------------------------
+  # sample joint angles
+  q1 = [90, -90, 90, -90, -90, 0]
+  q2 = [45, -90, 90, -70, -70, 180]
+  q1 = list_d2r(q1)
+  q2 = list_d2r(q2)
+
+  # function definition
+  def interpolate_joints(j1, j2, alpha):
+    local j_length = length(j1)
+    local tmp_joints = make_list(j_length, 0)
+    local i=0
+    while i < j_length:
+      tmp_joints[i] = j1[i] + (j2[i]-j1[i])*alpha
+      i=i+1
+    end
+    return tmp_joints
+  end
+
+  # test the function
+  def m7f():
+    alpha = 0.4
+    q3 = interpolate_joints(q1,q2, alpha)
+    optimovej(q1)
+    sleep(1)
+    optimovej(q3)
+    sleep(1)
+    optimovej(q2)
+
+  end
+  m7f()
+  
+  # -------------------------------
+  # module 7g
+  # write a function that evaluates if the entire path of a movej() complies with the safety limits
+  # -------------------------------
+  # assume target is given as joint angles in radians
+  
+
+  def joint_path_ok(q_target):
+    # argument must be a list of 6 joint angles in radians
+    start_joints = get_actual_joint_positions()
+    # list of joint angles and validity throughout the path
+    list_entry = struct(j=start_joints, reachable=True)
+    num_of_pts = 1000 # should provide sufficient resolution
+    joint_list = make_list(num_of_pts, list_entry)
+    path_reachable = True
+    entry_reachable = True
+    local i=0
+    while i < num_of_pts:
+      local alpha = i/num_of_pts
+      list_entry.j = interpolate_joints(start_joints, q_target, alpha)
+      entry_reachable = is_within_safety_limits(list_entry.j)
+      if (entry_reachable==False):
+        list_entry.reachable = False
+        path_reachable = False
+      end
+      i=i+1
+    end
+
+    return path_reachable
+  end
+  # test the function
+  # display popup with result of the function
+  q_target = [135, -110, 80, 20, -70, -180]
+  q_target = list_d2r(q_target)
+  def m7g():
+    path_ok = joint_path_ok(q_target)
+    popup("For the joint angles of :"+to_str(q_target)+
+          "<br>The path ok result is: "+to_str(path_ok))
+  end
+  m7g()
+  
+  # -------------------------------
+end
+
+
+
+
+

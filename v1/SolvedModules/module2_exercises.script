@@ -1,0 +1,83 @@
+def m2():
+    # module 2a
+    # # stream this code to the robot
+    # -------------------------------
+    def my_function():
+        popup("a line of text to be displayed", blocking=True)
+        sleep(0.5)
+        popup("another line of text to be displayed", blocking=True)
+    end
+    my_function()
+    # -------------------------------
+    # module 2b
+    # modify the code from module 1 to prompt the user to enter the values used as the function arguments
+    # use request_float_from_primary_client()
+    # then stream the function to the robot
+    # -------------------------------
+
+    def max_of_2(a,b):
+        if (a > b):
+            return a
+        else:
+            return b
+        end
+    end
+
+    def user_max2():
+          
+        v1 = request_float_from_primary_client("enter 1st num")
+        v2=request_float_from_primary_client("enter 2nd num")
+        my_ans = to_str(max_of_2(v1,v2))
+        # popup(my_ans, blocking=True)
+        str_ans = "<h1>"+ "Thanks for using the function!"+
+                "</h1>"+"You entered these numbers:"+"<br>"+
+                to_str(v1)+" and "+to_str(v2)+"<br>"+
+                "<i>The answer is: </i><b>"+my_ans
+        popup(str_ans, blocking=True)
+    end
+    user_max2()
+
+    # -------------------------------
+    # module 2c
+    # modify the code from module 2b to loop 3 times
+    # -------------------------------
+
+    def mod2c():
+        local i=0
+        N=3
+        while i < N:
+            user_max2()
+            i=i+1
+        end
+    end
+    mod2c()
+
+    # -------------------------------
+
+end
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

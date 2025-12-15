@@ -1,0 +1,59 @@
+def module6():
+    # module 6a
+    # freedrive
+    # put the robot into unconstrained freedrive for 5 seconds, then end freedrive mode
+    # -------------------------------
+  )
+    # -------------------------------
+    # module 6b
+    # put the robot into constrained freedrive for 5 seconds, then end freedrive mode
+    # have the constraints be set up so that the robot can only move in the tool x and y axes
+    # -------------------------------
+
+
+    # -------------------------------
+    # module 6c
+    # use freedrive and a digital input to save 3 waypoints, then move to them
+    # -------------------------------
+    
+
+    # -------------------------------
+    # module 6d
+    # get two waypoints that are just above the table and at least 100mm apart
+    # move to the first waypoint
+    # go into a force node, pushing down into the table with 5N of force
+    # loop back and forth between the waypoints
+    # -------------------------------
+    
+
+    # -------------------------------
+    # module 6e
+    # take the code from the previous module, and change it so that amount of force is controlled by a thread
+    # make the amount of force a sine wave
+    # -------------------------------
+    
+
+    # -------------------------------
+end
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

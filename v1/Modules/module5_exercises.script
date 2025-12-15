@@ -1,0 +1,38 @@
+def module5():
+    # module 5a
+    # threads
+    # write a thread to flash Digital out 0 on and off at 0.5Hz
+    # run this thread for 5 seconds
+    # -------------------------------
+  
+
+    # -------------------------------
+    # module 5b
+    # write another thread to flash Digital Out 1 on and off at 0.2Hz
+    # run both of these threads for 5 seconds, kill them, wait 3 seconds, then run them again.
+    # -------------------------------
+    
+
+    # -------------------------------
+    # module 5c
+    # modify the thread from module 5a to end after 3 cycles
+    # run the threads from 5a and 5b
+    # have the thread from 5b end exactly 1 second after the thread from 5a
+    # -------------------------------
+   
+
+    # -------------------------------
+    # module 5d
+    # have the robot move between 3 waypoints, while a thread cycles Digital Out 0 on and off at 0.5Hz
+    # -------------------------------
+      
+
+    # -------------------------------
+end
+
+
+
+
+
+
+

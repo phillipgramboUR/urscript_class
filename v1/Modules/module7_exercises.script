@@ -1,0 +1,99 @@
+def module7():
+  # module 7a
+  # forward kinematics
+  # move to the waypoint that is at the provided set of joint angles
+  # -------------------------------
+
+  # function to convert a list from degrees to radians
+  def list_d2r(arg):
+    local arg_length = length(arg)
+    local tmp_list = make_list(arg_length, 0)
+    local i=0
+    while i < arg_length:
+      tmp_list[i]=d2r(arg[i])
+      i=i+1
+    end
+    return tmp_list
+  end
+  j_degrees = [90, -90, 90, -90, -90, 0]
+
+  
+
+  # -------------------------------
+  # module 7b
+  # IK (inverse kinematics)
+  # move to the same waypoint using 2 different joint configurations
+  # -------------------------------
+  
+
+
+  # -------------------------------
+  # module 7c
+  # pose reachability
+  # start from the provided waypoint
+  # find a waypoint that is as far in the base x+ direction as possible and still reachable
+  # move to that waypoint
+  # -------------------------------
+  waypt1 = p[0,-0.15,0.25,0,3.14159,0]
+  
+
+  
+  # -------------------------------
+  # module 7d
+  # start from the provided waypoint
+  # find a waypoint that is as far as possible in the base x- direction
+  # find a waypoint that is as far as possible in the base y- direction
+  # move to those waypoints
+  # move to a wyapoint that is 40% of the way from the first to the second waypoint
+  # -------------------------------
+  
+
+  # -------------------------------
+  # module 7e
+  # grids
+  # the provided 4 waypoints are the corners of a grid
+  # the grid has 3 rows and 5 columns
+  # move to each point on the grid
+  # -------------------------------
+  
+    c1 = p[-0.1,-0.25,0.2,0,3.14159,0]
+    c2 = pose_add(c1, p[0.25,0,0,0,0,0])
+    c3 = pose_add(c2, p[0,-0.1,0,0,0,0])
+    c4 = pose_add(c1, p[0,-0.1,0,0,0,0])
+    
+
+
+
+  # -------------------------------
+  # module 7f
+  # interpolate_pose() calculates a pose at a fraction between 2 poses
+  # write a function that calculates a joint configuration at a fraction between 2 joint configurations
+  # name it interpolate_joints()
+  # -------------------------------
+  # sample joint angles
+  q1 = [90, -90, 90, -90, -90, 0]
+  q2 = [45, -90, 90, -70, -70, 180]
+  q1 = list_d2r(q1)
+  q2 = list_d2r(q2)
+
+  
+
+  
+  
+  # -------------------------------
+  # module 7g
+  # write a function that evaluates if the entire path of a movej() complies with the safety limits
+  # -------------------------------
+  # assume target is given as joint angles in radians
+  
+
+  
+  
+  
+  # -------------------------------
+end
+
+
+
+
+

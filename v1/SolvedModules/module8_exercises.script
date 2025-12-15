@@ -1,0 +1,137 @@
+def module8():
+
+    # module 8a
+    # speedj()
+    # rotate wrist 3 of the UR3e at 180deg/s for 10s
+    # -------------------------------
+
+    def m8a():
+        qd = [0,0,0,0,0,d2r(180)]
+        a = d2r(180)
+        t = 2
+        speedj(qd, a, t)
+        stopj(a)
+        qd = [0,0,0,0,0,-d2r(180)]
+        speedj(qd, a, t)
+        stopj(a)
+
+    end
+    # m8a()
+    # -------------------------------
+    # module 8b
+    # speedl()
+    # move up and down 150mm using speedl() and stopl()
+    # -------------------------------
+    def m8b():
+        # going up
+        start_pose = get_actual_tcp_pose()
+        while (point_dist(start_pose, get_actual_tcp_pose())<0.15):
+            xd = [0, 0, 0.1, 0, 0, 0]
+            a = 0.5
+            t = 0.001
+            speedl(xd, a, t)
+            # sync()
+        end
+        stopl(1)
+        # going down
+        start_pose = get_actual_tcp_pose()
+        while (point_dist(start_pose, get_actual_tcp_pose())<0.15):
+            xd = [0, 0, -0.1, 0, 0, 0]
+            a = 0.5
+            t = 0.002
+            speedl(xd, a, t)
+        end
+        stopl(1)
+    end
+    m8b()
+
+    # -------------------------------
+    # module 8c
+    # move 250mm in base X- using speedl()
+    # -------------------------------
+    def m8c():
+        start_pose = get_actual_tcp_pose()
+        while (point_dist(start_pose, get_actual_tcp_pose())<0.25):
+            xd = [-0.1, 0, 0, 0, 0, 0]
+            a = 0.5
+            t = 0.002
+            speedl(xd, a, t)
+        end
+        stopl(0.5)
+    end
+    # m8c()
+
+    # -------------------------------
+    # module 8d
+    # move in a 100mm square in the X-Y plane using speedl()
+    # record the start position and end position
+    # then use pose_dist() to see how close you ended up to the start position
+    # -------------------------------
+    def m8d():
+        init_pose = get_actual_tcp_pose()
+        a = 0.5
+        t = 0.002
+        # side 1
+        start_pose = get_actual_tcp_pose()
+        while (point_dist(start_pose, get_actual_tcp_pose())<0.1):
+            xd = [-0.1, 0, 0, 0, 0, 0]
+            speedl(xd, a, t)
+        end
+        stopl(a)
+        # side 2
+        start_pose = get_actual_tcp_pose()
+        while (point_dist(start_pose, get_actual_tcp_pose())<0.1):
+            xd = [0, -0.1, 0, 0, 0, 0]
+            speedl(xd, a, t)
+        end
+        stopl(a)
+        # side 3
+        start_pose = get_actual_tcp_pose()
+        while (point_dist(start_pose, get_actual_tcp_pose())<0.1):
+            xd = [0.1, 0, 0, 0, 0, 0]
+            speedl(xd, a, t)
+        end
+        stopl(a)
+        # side 4
+        start_pose = get_actual_tcp_pose()
+        while (point_dist(start_pose, get_actual_tcp_pose())<0.1):
+            xd = [0, 0.1, 0, 0, 0, 0]
+            speedl(xd, a, t)
+        end
+        stopl(a)
+        # final math
+        final_pose = get_actual_tcp_pose()
+        dist_diff = point_dist(init_pose, final_pose)
+        popup(to_str(dist_diff)+" meters", blocking = True)
+    end
+    m8d()
+
+end
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

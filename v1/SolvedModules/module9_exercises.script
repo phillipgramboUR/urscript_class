@@ -1,0 +1,129 @@
+def module9():
+    # world frame
+
+    # module 9a
+    # create a frame relative to the base
+    # make a popup with information about the frame
+    # -------------------------------
+    # reset world model
+    reset_world_model()
+    # declare elements
+    p_name = "frame1"
+    p_pose = p[-0.3, -0.3, 0.3, 0, 3.14, 0]
+    p_ref = "base"
+    add_frame(p_name, p_pose, p_ref)
+    attach_frame("frame1", "base")
+    # info on the fame
+    def get_info_on_frame(arg):
+        ans_coordinates = get_pose(arg,"base")
+        ans_name = to_str(arg)
+        ans_parent = get_frame_parent(arg)
+        ans_children = get_children(arg)
+        answer=struct(pose = ans_coordinates, name=ans_name, parent=ans_parent, children = ans_children)
+        return answer
+    end
+    my_string = get_info_on_frame("frame1")
+    popup(my_string, blocking = True)
+    
+    # -------------------------------
+    # module 9b
+    # create 3 waypoints (frames) relative to the previous frame, then move to them
+    # -------------------------------
+    add_frame("p1", p[0.1,0,0,0,0,0], "frame1")
+    attach_frame("p1", "frame1")
+    add_frame("p2", p[-0.1,0,0,0,0,0], "frame1")
+    attach_frame("p2", "frame1")
+    add_frame("p3", p[0,0.1,0,0,0,0], "frame1")
+    attach_frame("p3", "frame1")
+    optimovej("p1")
+    optimovej("p2")
+    optimovej("p3")
+    
+    
+    # -------------------------------
+    # module 9c
+    # move the previous frame, then move to the waypoints again
+    # -------------------------------
+    # option a
+    # f1_cur_pose = get_pose("frame1")
+    # f1_new_pose = pose_add(f1_cur_pose, p[0,0,0.1,0,0,0])
+    # move_frame("frame1", f1_new_pose, "base")
+
+    # option b
+    move_frame("frame1", p[0,0,-0.1,0,0,0], "frame1")
+
+    # move to the poses
+    optimovej("p1")
+    optimovej("p2")
+    optimovej("p3")
+
+    # -------------------------------
+    # module 9d
+    # move the world frame away from the robot base
+    # display the results in a popup
+    # -------------------------------
+    move_frame("world", p[0.2,0,0,0,0,0], "base")
+    world_info = get_info_on_frame("world")
+    popup(world_info, blocking = True)
+
+
+
+    # -------------------------------
+    # module 9e
+    # create two frames relative to the world
+    # display the pose of the frames relative to the base in a popup
+    # -------------------------------
+    add_frame("f3", p[0.3,0,0.1,0,0,0], "world")
+    add_frame("f4", p[0,0.3,0.1,0,0,0], "world")
+    attach_frame("f3", "world")
+    attach_frame("f4", "world")
+    f3_pose = get_pose("f3","base")
+    f4_pose = get_pose("f4","base")
+    popup("f3 pose relative to base: "+to_str(f3_pose) +"<br>"+
+          "f4 pose relative to base: "+to_str(f4_pose), blocking=True)
+
+
+
+    # -------------------------------
+    # module 9f
+    # record the previous frame locations
+    # adjust the location of the world relative to the base
+    # then display the new and old location of the frames
+    # -------------------------------
+    f3_pose_old = get_pose("f3","base")
+    f4_pose_old = get_pose("f4","base")
+    move_frame("world", p[0,0.2,0,0,0,3.14], "base")
+    f3_pose_new = get_pose("f3","base")
+    f4_pose_new = get_pose("f4","base")
+    popup("f3 old pose: "+to_str(f3_pose_old)+"<br>"+
+          "f3 new pose: "+to_str(f3_pose_new)+"<br><br>"+
+          "f4 old pose: "+to_str(f4_pose_old)+"<br>"+
+          "f4 new pose: "+to_str(f4_pose_new), blocking=True) 
+
+    # -------------------------------
+    # module 9g
+    # knowing that the world is the parent of all frames:
+    # make a function that finds the children of the world, then all of their children, etc
+    # display the results in a popup
+    # -------------------------------
+
+end
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

@@ -1,0 +1,173 @@
+def module3():
+    # module 3a
+    # structs and lists
+    # Create a variable length list of integers
+    # prompt the user to enter integers, and then ask if they want to add another, looping until the user says no
+    # display the result in a popup
+    # -------------------------------
+    def m3a():
+        global my_ints = make_list(0,0,100)
+        popup(to_str(my_ints), blocking=True)
+        user_continue = True
+        while user_continue == True:
+            tmp = request_integer_from_primary_client("enter a number")
+            my_ints.append(tmp)
+            user_continue = request_boolean_from_primary_client("add another number?")
+        end       
+        popup(to_str(my_ints), blocking=True) 
+    end
+    m3a()
+
+    # -------------------------------
+    # module 3b
+    # display the results of the list back to user, one entry at a time
+    # -------------------------------
+    def m3b():    
+        local i=0
+        while i < my_ints.length():
+            popup("the next item in the list is: "+to_str(my_ints[i]), blocking=True)
+            i=i+1
+        end
+    end
+    m3b()
+
+
+    # -------------------------------
+    # module 3c
+    # display the result of the list back to the user, two entries at a time
+    # -------------------------------
+    def m3c():
+        # my_ints = my_ints
+        if (my_ints.length() >= 2):
+            display_2_at_a_time=True
+        else:
+            display_2_at_a_time=False
+        end
+        while display_2_at_a_time==True:
+            tmp = [my_ints[0],my_ints[1]]
+            my_ints.remove(0)
+            my_ints.remove(0)
+            popup("the next two items are: "+to_str(tmp), blocking=True)
+            if (my_ints.length() >= 2):
+                display_2_at_a_time=True
+            else:
+                display_2_at_a_time=False
+            end
+        end
+        if (my_ints.length() >= 1):
+          popup("the last item is: "+ to_str(my_ints[0]), blocking=True)
+        end
+    end
+    m3c()
+
+    # -------------------------------
+    # module 3d
+    # make a struct describing a workpiece blank - SKU#, l/w/h, weight
+    # display the struct back to the user
+    # -------------------------------
+    def m3d():
+        # initialize workpiece blank
+        workpiece = struct(SKU=0, l=0, w=0, h=0, weight=0)
+        workpiece.SKU = request_integer_from_primary_client("enter sku")
+        # get each items's info
+        # ------------
+
+        # display info to the user
+        resultant_string = workpiece.to_string()
+        popup(resultant_string, blocking=True)
+        weight_string = "the weight is: "+to_str(workpiece.weight)
+        popup(weight_string, blocking=True)
+    end
+    m3d()
+   
+
+    # -------------------------------
+    # module 3e
+    # make a varable length list of workpiece structs
+    # display the number of workpieces in the list, and the total weight of all workpieces
+    # -------------------------------
+    def m3e():
+        workpiece = struct(SKU=0, l=0, w=0, h=0, weight=0)
+        workpiece_list = make_list(0,workpiece,100)
+        popup(to_str(workpiece_list), blocking=True)
+        i=0
+        user_continue=True
+        while (user_continue == True):
+            tmp_sku=request_integer_from_primary_client("enter sku")
+            tmp_l=request_float_from_primary_client("enter length")
+            tmp_w=request_float_from_primary_client("enter width")
+            tmp_h=request_float_from_primary_client("enter height")
+            tmp_weight=request_float_from_primary_client("enter weight")
+            tmp_workpiece = struct(SKU=tmp_sku, l=tmp_l, w=tmp_w, h=tmp_h, weight=tmp_weight)
+            workpiece_list[i]=tmp_workpiece
+            i=i+1
+            user_continue=request_boolean_from_primary_client("add another workpiece?")
+        end
+        workpiece_count = workpiece_list.length()
+        weight_sum = 0
+        local i=0
+        while i < workpiece_count:
+            weight_sum = weight_sum + workpiece_list[i].weight
+            i=i+1
+        end
+        popup("the workpiece count is: "+to_str(workpiece_count), blocking=True)
+        popup("the total weight is: "+to_str(weight_sum), blocking=True)
+    end
+    m3e()
+
+
+    # -------------------------------
+    # module 3f
+    # FIFO (first in, first out) lists
+    # create a variable length list with a capacity of 10 integers
+    # prompt the user to enter 4 items
+    # then, make a loop that executes 5 times
+    # in each pass of the loop:
+    # - remove the first item in the list
+    # - prompt the user to enter a new item to go at the end of list 
+    # - display the current value of the list 
+    # -------------------------------
+    def m3f():
+        # initialize list
+        my_list = make_list(0,0,10)
+
+        # loop 4 times asking for an input
+        local i=0
+        while i < 4:
+          tmp_input = request_integer_from_primary_client("enter a number")
+          my_list.append(tmp_input)
+          i=i+1
+        end
+        
+        # loop 5 times, changing the list
+        local i=0
+        while i < 5:
+          my_list.remove(0)
+          tmp_input = request_integer_from_primary_client("enter a number")
+          my_list.append(tmp_input)
+          popup("the list is now: "+"<br>"+to_str(my_list), blocking=True)
+          i=i+1
+        end
+
+    end
+    m3f()
+
+    # -------------------------------
+
+end 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
